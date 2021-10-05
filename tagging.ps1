@@ -2,10 +2,13 @@
 $resources = Get-AzResource -ResourceGroupName psgsan-ga-rg
 foreach($resource in $resources){
      $resourceName = $resource.Name 
-     if($resourceName -contains '*Failure*') {
-        continue;
-     }
+   
+     
      $tags = $resource.Tags
+     Write-Host "$resourceName $resource.Kind"
+     if($tags.ContainsKey("Description")){
+        continue
+     }
      $Description = Read-Host -Prompt "Description for $resourceName"
      $Purpose = Read-Host -Prompt "Purpose for $resourceName"
      $BusinessUnit = Read-Host -Prompt "BusinessUnit (e.g Wealth) for $resourceName"
@@ -17,7 +20,7 @@ foreach($resource in $resources){
      $BusinessOwner = Read-Host -Prompt "Business Owner for $resourceName"
      $TechnicalOwner = Read-Host -Prompt "Technical Owner for $resourceName"
      $CostCenter = Read-Host -Prompt "Cost Center for $resourceName"
-     $ResourceType = $resource.ResourceType;
+     $ResourceType = $resource.Kind;
 
      $tags += @{Description=$Description }
      $tags += @{Name=$resourceName }
